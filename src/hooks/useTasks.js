@@ -1,3 +1,4 @@
+// src/hooks/useTasks.js
 import { useEffect, useState } from 'react'
 import {
   collection,
@@ -17,10 +18,20 @@ export default function useTasks(uid) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    let mounted = true
+    let unsubscribe = null
+
+    // Si no hay uid, limpiamos el estado, pero lo hacemos en la siguiente microtarea
     if (!uid) {
-      setTasks([])
-      setLoading(false)
-      return
+      // evitar setState sincrónico dentro del effect
+      Promise.resolve().then(() => {
+        if (!mounted) return
+        setTasks([])
+        setLoading(false)
+      })
+      return () => {
+        mounted = false
+      }
     }
 
     const q = query(
@@ -28,16 +39,24 @@ export default function useTasks(uid) {
       orderBy('createdAt', 'desc')
     )
 
-    const unsubscribe = onSnapshot(q, snapshot => {
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }))
-      setTasks(data)
-      setLoading(false)
-    })
+    unsubscribe = onSnapshot(
+      q,
+      snapshot => {
+        if (!mounted) return
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        setTasks(data)
+        setLoading(false)
+      },
+      error => {
+        console.error('useTasks onSnapshot error', error)
+        if (mounted) setLoading(false)
+      }
+    )
 
-    return () => unsubscribe()
+    return () => {
+      mounted = false
+      if (typeof unsubscribe === 'function') unsubscribe()
+    }
   }, [uid])
 
   function addTask(title) {

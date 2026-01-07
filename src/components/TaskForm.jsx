@@ -11,17 +11,24 @@ function TaskForm({ onAdd }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6 flex gap-2">
-      <input
-        className="flex-1 border rounded px-3 py-2"
-        placeholder="Nueva tarea..."
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-      />
-      <button className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700">
-        Añadir
-      </button>
-    </form>
+    <form
+  onSubmit={handleSubmit}
+  className="mb-8 flex items-center gap-3 bg-white p-4 rounded-lg shadow-sm"
+>
+  <input
+    className="flex-1 bg-transparent outline-none text-gray-800 placeholder-gray-400"
+    placeholder="Escribe una nueva tarea..."
+    value={title}
+    onChange={e => setTitle(e.target.value)}
+  />
+
+  <button
+    className="text-sm font-medium text-blue-600 hover:text-blue-700 transition"
+  >
+    Añadir
+  </button>
+</form>
+
   )
 }
 
