@@ -1,20 +1,22 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
+import Home from './pages/Home'
+import Login from './pages/Login'
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-100">
+        <Header />
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
-        <h2 className="text-2xl font-semibold text-gray-800">
-          Mis tareas
-        </h2>
-
-        <p className="mt-2 text-gray-600">
-          Aquí verás tus tareas cuando inicies sesión.
-        </p>
-      </main>
-    </div>
+        <main className="max-w-5xl mx-auto px-4 py-6">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   )
 }
 

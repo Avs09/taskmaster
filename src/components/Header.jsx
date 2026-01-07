@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function Header() {
   return (
     <header className="bg-white border-b">
@@ -7,9 +9,12 @@ function Header() {
         </h1>
 
         <nav>
-          <button className="text-sm font-medium text-blue-600 hover:underline">
+          <Link
+            to="/login"
+            className="text-sm font-medium text-blue-600 hover:underline"
+          >
             Login
-          </button>
+          </Link>
         </nav>
       </div>
     </header>
