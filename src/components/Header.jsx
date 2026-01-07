@@ -1,20 +1,37 @@
 import { Link } from 'react-router-dom'
+import useAuth from '../hooks/useAuth'
 
 function Header() {
+  const { currentUser, logout } = useAuth()
+
+  async function handleLogout() {
+    try {
+      await logout()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <header className="bg-white border-b">
       <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-gray-800">
+        <Link to="/" className="text-xl font-bold">
           TaskMaster
-        </h1>
+        </Link>
 
         <nav>
-          <Link
-            to="/login"
-            className="text-sm font-medium text-blue-600 hover:underline"
-          >
-            Login
-          </Link>
+          {currentUser ? (
+            <button
+              onClick={handleLogout}
+              className="text-sm text-red-600 hover:underline"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link to="/login" className="text-sm text-blue-600 hover:underline">
+              Login
+            </Link>
+          )}
         </nav>
       </div>
     </header>
